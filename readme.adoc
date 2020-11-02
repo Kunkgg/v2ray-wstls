@@ -1,4 +1,3 @@
-= readme
 :author: Goukun <goukun07@gmail.com>
 :date: 2020-11-02
 // :toc:
@@ -25,7 +24,7 @@
 :url-github: https://github.com/Kunkgg
 :url-v2fly-docker-repos: https://github.com/v2fly/docker
 :url-ustc-alpine: https://mirrors.ustc.edu.cn/help/alpine.html
-:url-github-repos: https://mirrors.ustc.edu.cn/help/alpine.html
+:url-github-repos: https://github.com/Kunkgg/v2ray-wstls
 :url-dockerhub-repos: https://hub.docker.com/repository/docker/kunka/v2ray-wstls
 //:url-blog: http-to-my-blog
 
@@ -40,9 +39,9 @@ Fork from {url-v2fly-docker-repos}[v2fly/docker]
 * Add `V2RAY_UUID` and `V2RAY_VIRTUAL_PORT` environment variables supporting
 while creating container
 
-[GitHub Repos]
+{url-github-repos}[GitHub Repos]
 
-[DockerHub Repos]
+{url-dockerhub-repos}[DockerHub Repos]
 
 == Create image
 
