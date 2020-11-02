@@ -1,0 +1,75 @@
+= readme
+:author: Goukun <goukun07@gmail.com>
+:date: 2020-11-02
+// :toc:
+:icons: font
+:library: Asciidoctor
+// ifdef::asciidoctor[]
+// :source-highlighter: coderay
+// endif::asciidoctor[]
+:idprefix:
+// :stylesheet: ../../resources/asciidoctor.css
+:imagesdir: images
+:includesdir: includes
+//:title-logo-image: image:logo.png[pdfwidth=3.00in,align=center]
+//:backend: docbook45
+//:backend: html5
+//:doctype: book
+//:sectids!:
+:plus: &#43;
+//:revealjsdir: ../../resources/reveal.js
+//:revealjs_theme: black
+// available themes: black beige blood league moon night serif simple sky solarized white
+
+// refs
+:url-github: https://github.com/Kunkgg
+:url-v2fly-docker-repos: https://github.com/v2fly/docker
+:url-ustc-alpine: https://mirrors.ustc.edu.cn/help/alpine.html
+:url-github-repos: https://mirrors.ustc.edu.cn/help/alpine.html
+:url-dockerhub-repos: https://hub.docker.com/repository/docker/kunka/v2ray-wstls
+//:url-blog: http-to-my-blog
+
+
+== Introduce
+
+Fork from {url-v2fly-docker-repos}[v2fly/docker]
+
+* Add {url-ustc-alpine}[alpine Chinese ustc repository]
+* Add http proxy supporting while creating image
+* Add simple `WebSockect + TLS` v2ray server config template
+* Add `V2RAY_UUID` and `V2RAY_VIRTUAL_PORT` environment variables supporting
+while creating container
+
+[GitHub Repos]
+
+[DockerHub Repos]
+
+== Create image
+
+[source, sh]
+----
+export TARGETPLATFORM="linux/amd64"
+export HTTP_PROXY="http://192.168.0.7:1081"
+export TAG_URL="https://raw.githubusercontent.com/v2fly/docker/master/ReleaseTag"
+export TAG="$(curl -fsSL ${TAG_URL})"
+
+docker build \
+--build-arg TARGETPLATFORM=${TARGETPLATFORM} \
+--build-arg HTTP_PROXY=${HTTP_PROXY} \
+-t v2ray-wstls:${TAG} .
+----
+
+== Create container
+
+[source, sh]
+----
+export CONTAINER_NAME="v2ray-wstls"
+export V2RAY_UUID="$(uuidgen)"
+export V2RAY_VIRTUAL_PORT=10000
+
+docker run -d --name ${CONTAINER_NAME} \
+--env V2RAY_UUID=${V2RAY_UUID} \
+--env V2RAY_VIRTUAL_PORT=${V2RAY_VIRTUAL_PORT} \
+-p ${V2RAY_VIRTUAL_PORT}:${V2RAY_VIRTUAL_PORT} \
+kunka/v2ray-wstls
+----
