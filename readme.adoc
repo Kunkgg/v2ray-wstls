@@ -49,8 +49,13 @@ while creating container
 ----
 export TARGETPLATFORM="linux/amd64"
 export HTTP_PROXY="http://192.168.0.7:1081"
-export TAG_URL="https://raw.githubusercontent.com/v2fly/docker/master/ReleaseTag"
-export TAG="$(curl -fsSL ${TAG_URL})"
+export TAG_URL="https://github.com/v2fly/v2ray-core/tags"
+export TAG=$(curl "${TAG_URL}" \
+            | grep -E "/v2fly/v2ray-core/releases/tag/v" \
+            | head -n1 \
+            | grep -o -E "/v.*>$" \
+            | tr -d '">' | cut -d'/' -f 6)
+
 
 docker build \
 --build-arg TARGETPLATFORM=${TARGETPLATFORM} \
