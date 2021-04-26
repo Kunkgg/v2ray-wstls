@@ -16,6 +16,18 @@ v2ray_error() {
         exit 1
 }
 
+use_curl() {
+    local target_url=$1
+
+    curl -fsSL ${target_url}
+}
+
+use_curl_save() {
+    local target_url=$1
+
+    curl -fsSL --remote-name ${target_url}
+}
+
 v2ray_download() {
     v2ray_note ${TARGETPLATFORM}
     v2ray_note ${HTTP_PROXY}
@@ -66,8 +78,8 @@ v2ray_download() {
     v2ray_note "Downloading binary file: ${V2RAY_FILE}"
     v2ray_note "Downloading binary file: ${DGST_FILE}"
 
-    TAG_URL="https://raw.githubusercontent.com/v2fly/docker/master/ReleaseTag"
-    TAG=$(curl -fsSL ${TAG_URL} -x ${HTTP_PROXY})
+    TAG_URL="https://github.com/v2fly/v2ray-core/tags"
+    TAG=$(curl "${TAG_URL}" | grep -E "/v2fly/v2ray-core/releases/tag/v" | head -n1 | grep -o -E "/v.*>$" | tr -d '">' | cut -d'/' -f 6)
 
     URL_BASE="https://github.com/v2fly/v2ray-core/releases/download"
     URL_V2RAY="${URL_BASE}/${TAG}/${V2RAY_FILE}"
@@ -76,8 +88,8 @@ v2ray_download() {
     v2ray_note "tag: ${TAG}"
     v2ray_note "v2ray.zip url: ${URL_V2RAY}"
     v2ray_note "v2ray.zip.dgst url: ${URL_V2RAY_DGST}"
-    curl -fsSL --remote-name ${URL_V2RAY} -x ${HTTP_PROXY}
-    curl -fsSL --remote-name ${URL_V2RAY_DGST} -x ${HTTP_PROXY}
+    use_curl_save ${URL_V2RAY}
+    use_curl_save ${URL_V2RAY_DGST}
 
     if [ $? -ne 0 ]; then
         v2ray_error "Error: Failed to download binary file: ${V2RAY_FILE} ${DGST_FILE}"
